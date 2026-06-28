@@ -62,6 +62,12 @@ function Navbar() {
                                 Manage Jobs
                             </Link>
                         </li>
+
+                        <li className="nav-item">
+                            <Link className="nav-link text-white" to="/recruiter/jobs/create" >
+                                Post Job
+                            </Link>
+                        </li>
                     </>
                 )}
 

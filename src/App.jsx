@@ -6,6 +6,10 @@ import RecruiterDashboard from "./pages/RecruiterDashboard";
 import ManageJobs from "./pages/ManageJobs";
 // ProtectedRoute import removed because it's not used in this file
 import RoleRoute from "./components/RoleRoute";
+import EditJob from "./pages/EditJob";
+import PostJob from "./pages/PostJob";
+import ViewApplicants from "./pages/ViewApplicants";
+
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -52,6 +56,31 @@ function App() {
       </RoleRoute>
     }
   />
+
+  <Route
+    path="/recruiter/jobs/create"
+    element={
+        <RoleRoute allowedRoles={["RECRUITER"]}>
+            <PostJob />
+        </RoleRoute>
+    }
+/>
+  <Route
+    path="/recruiter/jobs/:jobId/applicants"
+    element={
+        <RoleRoute allowedRoles={["RECRUITER"]}>
+            <ViewApplicants />
+        </RoleRoute>
+    }
+/>
+<Route
+    path="/recruiter/jobs/edit/:jobId"
+    element={
+        <RoleRoute allowedRoles={["RECRUITER"]}>
+            <EditJob />
+        </RoleRoute>
+    }
+/>
 
 </Routes>
 
