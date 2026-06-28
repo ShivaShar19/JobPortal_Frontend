@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar";
 import MyApplications from "./pages/MyApplications";
 import RecruiterDashboard from "./pages/RecruiterDashboard";
 import ManageJobs from "./pages/ManageJobs";
-import ProtectedRoute from "./components/ProtectedRoute";
+// ProtectedRoute import removed because it's not used in this file
 import RoleRoute from "./components/RoleRoute";
 
 import Login from "./pages/Login";
@@ -14,6 +14,8 @@ import Home from "./pages/Home";
 function App() {
   return (
     <BrowserRouter>
+
+      <Navbar />
       
 <Routes>
 
