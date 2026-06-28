@@ -14,13 +14,15 @@ export function AuthProvider({ children }) {
         setRole(userRole);
     };
 
-    const logout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("role");
+const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
 
-        setToken(null);
-        setRole(null);
-    };
+    setToken(null);
+    setRole(null);
+
+    window.location.href = "/login";
+};
 
     return (
         <AuthContext.Provider

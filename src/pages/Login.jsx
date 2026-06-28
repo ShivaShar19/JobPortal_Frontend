@@ -29,7 +29,8 @@ function Login() {
 
             navigate("/");
 
-        } catch (error) {
+        } catch (err) {
+            console.error(err);
             alert("Invalid Credentials");
         }
     };
