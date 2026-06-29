@@ -9,6 +9,8 @@ import RoleRoute from "./components/RoleRoute";
 import EditJob from "./pages/EditJob";
 import PostJob from "./pages/PostJob";
 import ViewApplicants from "./pages/ViewApplicants";
+import JobDetails from "./pages/JobDetails";
+import ApplyJob from "./pages/ApplyJob";
 
 
 import Login from "./pages/Login";
@@ -27,7 +29,8 @@ function App() {
   <Route path="/" element={<Home />} />
   <Route path="/login" element={<Login />} />
   <Route path="/register" element={<Register />} />
-
+  <Route path="/jobs/:jobId" element={<JobDetails />} />
+  
   {/* JOB SEEKER ONLY */}
   <Route
     path="/applications"
@@ -37,6 +40,15 @@ function App() {
       </RoleRoute>
     }
   />
+
+  <Route
+    path="/apply/:jobId"
+    element={
+        <RoleRoute allowedRoles={["JOB_SEEKER"]}>
+            <ApplyJob />
+        </RoleRoute>
+    }
+/>
 
   {/* RECRUITER ONLY */}
   <Route

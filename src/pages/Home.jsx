@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { getAllJobs } from "../services/jobService";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
 
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         loadJobs();
@@ -59,7 +62,9 @@ function Home() {
                                     <strong>Salary:</strong> {job.salary}
                                 </p>
 
-                                <button className="btn btn-primary btn-sm">
+                                <button className="btn btn-primary btn-sm"
+                                    onClick={() => navigate(`/jobs/${job.id}`)}
+                                    >
                                     View Details
                                 </button>
 
