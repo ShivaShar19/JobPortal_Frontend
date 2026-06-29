@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-    getRecruiterJobs,
-    deleteJob
-} from "../services/recruiterJobService";
+import {getRecruiterJobs, deleteJob} from "../services/recruiterJobService";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function ManageJobs() {
 
@@ -44,18 +42,33 @@ function ManageJobs() {
                 )
             );
 
-            alert("Job deleted successfully");
+            toast.success("Job deleted successfully");
 
         } catch (error) {
 
             console.error(error);
-            alert("Failed to delete job");
+            toast.error("Failed to delete job");
         }
     };
 
-    if (loading) {
-        return <h3 className="text-center mt-4">Loading...</h3>;
-    }
+if (loading) {
+    return (
+        <div className="text-center mt-5">
+            <div
+                className="spinner-border"
+                role="status"
+            >
+                <span className="visually-hidden">
+                    Loading...
+                </span>
+            </div>
+
+            <p className="mt-2">
+                Loading jobs...
+            </p>
+        </div>
+    );
+}
 
     return (
         <div className="container mt-4">

@@ -6,6 +6,10 @@ function Home() {
 
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedLocation, setSelectedLocation] = useState("");
+    const [selectedJobType, setSelectedJobType] = useState("");
+
     const navigate = useNavigate();
 
 
@@ -24,18 +28,128 @@ function Home() {
         }
     };
 
-    if (loading) {
-        return <h3 className="text-center mt-5">Loading jobs...</h3>;
-    }
+if (loading) {
+    return (
+        <div className="text-center mt-5">
+            <div
+                className="spinner-border"
+                role="status"
+            >
+                <span className="visually-hidden">
+                    Loading...
+                </span>
+            </div>
 
+            <p className="mt-2">
+                Loading jobs...
+            </p>
+        </div>
+    );
+}
+
+const filteredJobs = jobs.filter((job) => {
+
+    const matchesSearch =
+        job.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.companyName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.location?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesLocation =
+        selectedLocation === "" ||
+        job.location === selectedLocation;
+
+    const matchesJobType =
+        selectedJobType === "" ||
+        job.jobType === selectedJobType;
+
+    return (
+        matchesSearch &&
+        matchesLocation &&
+        matchesJobType
+    );
+});
+    const locations = [...new Set(
+    jobs.map(job => job.location)
+)];
+
+const jobTypes = [...new Set(
+    jobs.map(job => job.jobType)
+)];
     return (
         <div className="container mt-4">
 
             <h2 className="mb-4">Latest Jobs</h2>
 
+            <div className="row mb-4">
+
+    <div className="col-md-6">
+        <select
+            className="form-select"
+            value={selectedLocation}
+            onChange={(e) =>
+                setSelectedLocation(e.target.value)
+            }
+        >
+            <option value="">
+                All Locations
+            </option>
+
+            {locations.map((location) => (
+                <option
+                    key={location}
+                    value={location}
+                >
+                    {location}
+                </option>
+            ))}
+        </select>
+    </div>
+
+    <div className="col-md-6">
+        <select
+            className="form-select"
+            value={selectedJobType}
+            onChange={(e) =>
+                setSelectedJobType(e.target.value)
+            }
+        >
+            <option value="">
+                All Job Types
+            </option>
+
+            {jobTypes.map((type) => (
+                <option
+                    key={type}
+                    value={type}
+                >
+                    {type}
+                </option>
+            ))}
+        </select>
+    </div>
+
+</div>
+
+            <div className="mb-4">
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search by title, company, or location..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+
             <div className="row">
 
-                {jobs.map((job) => (
+                {filteredJobs.length === 0 && (
+                    <div className="text-center mt-4">
+                        <h5>No jobs found</h5>
+                    </div>
+                    )}                
+
+                {filteredJobs.map((job) => (
+
                     <div className="col-md-4 mb-3" key={job.id}>
 
                         <div className="card shadow-sm">

@@ -34,3 +34,10 @@ export const applyForJob = async (
 
     return response.data;
 };
+
+export const withdrawApplication = async (applicationId) => {
+    const response = await api.delete(
+        `/api/jobseeker/${applicationId}`
+    );
+    return response.data;
+};

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 function Login() {
 
@@ -27,13 +28,16 @@ function Login() {
                 response.role
             );
 
+            toast.success("Login successful!");
+
             navigate("/");
 
         } catch (err) {
             console.error(err);
-            alert("Invalid Credentials");
+            toast.error("Login failed. Please check your credentials.");
         }
     };
+    
 
     return (
         <div className="container mt-5">

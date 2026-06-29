@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getJobById } from "../services/jobService";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 function JobDetails() {
 
@@ -11,13 +12,14 @@ function JobDetails() {
     const { token, role } = useAuth();
 
     const [job, setJob] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         loadJob();
     }, []);
 
     const loadJob = async () => {
-
+        setLoading(true);
         try {
 
             const data = await getJobById(jobId);
@@ -27,6 +29,9 @@ function JobDetails() {
         } catch (error) {
 
             console.error(error);
+            toast.error("Failed to load job details");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -34,28 +39,38 @@ function JobDetails() {
 
         if (!token) {
 
-            alert("Please login first");
+            toast.error("Please login first");
             navigate("/login");
             return;
         }
 
         if (role !== "JOB_SEEKER") {
 
-            alert("Only Job Seekers can apply");
+            toast.error("Only Job Seekers can apply");
             return;
         }
 
         navigate(`/apply/${job.id}`);
     };
 
-    if (!job) {
-
-        return (
-            <div className="container mt-4">
-                Loading...
+if (loading) {
+    return (
+        <div className="text-center mt-5">
+            <div
+                className="spinner-border"
+                role="status"
+            >
+                <span className="visually-hidden">
+                    Loading...
+                </span>
             </div>
-        );
-    }
+
+            <p className="mt-2">
+                Loading job details...
+            </p>
+        </div>
+    );
+}
 
     return (
         <div className="container mt-4">

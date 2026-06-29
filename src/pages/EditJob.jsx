@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
@@ -40,9 +41,7 @@ function EditJob() {
             });
 
         } catch (error) {
-
-            console.error(error);
-            alert("Failed to load job");
+            toast.error("Failed to load job");
         }
     };
 
@@ -65,14 +64,13 @@ function EditJob() {
                 formData
             );
 
-            alert("Job updated successfully");
+            toast.success("Job updated successfully");
 
             navigate("/recruiter/jobs");
 
         } catch (error) {
 
-            console.error(error);
-            alert("Failed to update job");
+            toast.error("Failed to update job");
         }
     };
 

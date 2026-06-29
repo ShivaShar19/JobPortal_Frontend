@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { toast } from "react-toastify";
 import { applyForJob } from "../services/applicationService";
 
 function ApplyJob() {
@@ -16,7 +16,7 @@ function ApplyJob() {
 
         if (!resume) {
 
-            alert("Please select a resume");
+            toast.error("Please select a resume");
             return;
         }
 
@@ -27,15 +27,12 @@ function ApplyJob() {
                 resume
             );
 
-            alert("Application submitted successfully");
+            toast.success("Application submitted successfully");
 
             navigate("/applications");
 
         } catch (error) {
-
-            console.error(error);
-
-            alert(
+            toast.error(
                 error.response?.data ||
                 "Failed to apply"
             );

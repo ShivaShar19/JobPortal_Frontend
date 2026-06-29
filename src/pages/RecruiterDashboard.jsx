@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { getDashboard } from "../services/recruiterService";
+import { toast } from "react-toastify";
 
 function RecruiterDashboard() {
 
     const [dashboard, setDashboard] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         loadDashboard();
@@ -11,17 +13,36 @@ function RecruiterDashboard() {
 
     const loadDashboard = async () => {
         try {
+            setLoading(true);
             const data = await getDashboard();
             console.log(data);
             setDashboard(data);
         } catch (error) {
             console.error(error);
+            toast.error("Failed to load dashboard");    
+        }finally {
+            setLoading(false);
         }
     };
 
-    if (!dashboard) {
-        return <h3 className="text-center mt-4">Loading Dashboard...</h3>;
-    }
+if (loading) {
+    return (
+        <div className="text-center mt-5">
+            <div
+                className="spinner-border"
+                role="status"
+            >
+                <span className="visually-hidden">
+                    Loading...
+                </span>
+            </div>
+
+            <p className="mt-2">
+                Loading Dashboard...
+            </p>
+        </div>
+    );
+}
 
     return (
         <div className="container mt-4">

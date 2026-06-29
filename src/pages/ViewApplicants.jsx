@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { getApplicantsForJob, updateApplicationStatus } from "../services/recruiterJobService";
 
 function ViewApplicants() {
@@ -21,9 +22,12 @@ function ViewApplicants() {
 
             setApplications(data);
 
+            toast.success("Applicants loaded successfully");
+
         } catch (error) {
 
             console.error(error);
+            toast.error("Failed to load applicants");
         }
     };
 
@@ -43,7 +47,7 @@ function ViewApplicants() {
     } catch (error) {
 
         console.error(error);
-        alert("Failed to update status");
+        toast.error("Failed to update status");
     }
 };
 

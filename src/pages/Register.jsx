@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../services/authService";
+import { toast } from "react-toastify";
 
 function Register() {
 
@@ -22,14 +23,15 @@ function Register() {
                 role
             });
 
-            alert("Registration successful");
+            toast.success("Registration successful!");
             navigate("/login");
 
         } catch (err) {
             console.error(err);
-            alert("Registration failed");
+            toast.error("Registration failed. Please try again.");
         }
     };
+    
 
     return (
         <div className="container mt-5">

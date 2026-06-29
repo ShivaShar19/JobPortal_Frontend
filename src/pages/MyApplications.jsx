@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { getMyApplications } from "../services/applicationService";
+// import { getMyApplications } from "../services/applicationService";
+import { toast } from "react-toastify";
+import { getMyApplications, withdrawApplication} from "../services/applicationService";
 
 function MyApplications() {
 
@@ -15,29 +17,72 @@ function MyApplications() {
             const data = await getMyApplications();
             setApplications(data);
         } catch (error) {
+            toast.error("Failed to load applications");
             console.error(error);
         } finally {
             setLoading(false);
         }
     };
 
-    if (loading) {
-        return <h3 className="text-center mt-4">Loading...</h3>;
+if (loading) {
+    return (
+        <div className="text-center mt-5">
+            <div
+                className="spinner-border"
+                role="status"
+            >
+                <span className="visually-hidden">
+                    Loading...
+                </span>
+            </div>
+
+            <p className="mt-2">
+                Loading applications...
+            </p>
+        </div>
+    );
+}
+
+const handleWithdraw = async (applicationId) => {
+
+toast.info("Please confirm application withdrawal");
+
+const confirmed = window.confirm(
+    "Are you sure you want to withdraw this application?"
+);
+
+    if (!confirmed) return;
+
+    try {
+        await withdrawApplication(applicationId);
+
+        setApplications(
+            applications.filter(
+                app => app.id !== applicationId
+            )
+        );
+
+        toast.success("Application withdrawn successfully");
+    } catch (error) {
+        console.error(error);
+        toast.error("Failed to withdraw application");
     }
+};
 
     return (
         <div className="container mt-4">
 
             <h2>My Applications</h2>
 
-            <table className="table table-bordered mt-3">
+            <table className="table table-bordered mt-3 text-center">
 
-                <thead>
+                <thead className="table-success">
                     <tr>
                         <th>Job Title</th>
                         <th>Company</th>
                         <th>Status</th>
                         <th>Applied At</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -48,6 +93,13 @@ function MyApplications() {
                         <td>{application.companyName}</td>
                         <td>{application.status}</td>
                         <td>{new Date(application.appliedAt).toLocaleString()}</td>
+                        <td>
+                            <button className="btn btn-danger btn-sm"
+                                onClick={() => handleWithdraw(application.id)}
+                            >
+                                Withdraw
+                            </button>
+                        </td>
                     </tr>
                     ))}
                 </tbody>
