@@ -1,0 +1,16 @@
+.card {
+    border-radius: 12px;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.badge {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+}
+
+.btn {
+    border-radius: 8px;
+}

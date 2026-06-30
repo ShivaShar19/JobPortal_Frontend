@@ -12,6 +12,9 @@ function EditJob() {
     const { jobId } = useParams();
     const navigate = useNavigate();
 
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+
     const [formData, setFormData] = useState({
         title: "",
         companyName: "",
@@ -41,7 +44,13 @@ function EditJob() {
             });
 
         } catch (error) {
+
+            console.error(error);
             toast.error("Failed to load job");
+
+        } finally {
+
+            setLoading(false);
         }
     };
 
@@ -59,102 +68,223 @@ function EditJob() {
 
         try {
 
+            setSaving(true);
+
             await updateJob(
                 jobId,
                 formData
             );
 
-            toast.success("Job updated successfully");
+            toast.success(
+                "Job updated successfully"
+            );
 
             navigate("/recruiter/jobs");
 
         } catch (error) {
 
-            toast.error("Failed to update job");
+            console.error(error);
+
+            toast.error(
+                "Failed to update job"
+            );
+
+        } finally {
+
+            setSaving(false);
         }
     };
 
+    if (loading) {
+
+        return (
+            <div className="text-center mt-5">
+
+                <div
+                    className="spinner-border"
+                    role="status"
+                >
+                    <span className="visually-hidden">
+                        Loading...
+                    </span>
+                </div>
+
+                <p className="mt-3">
+                    Loading job details...
+                </p>
+
+            </div>
+        );
+    }
+
     return (
-        <div className="container mt-4">
 
-            <h2>Edit Job</h2>
+        <div className="container py-4">
 
-            <form onSubmit={handleSubmit}>
+            <div className="row justify-content-center">
 
-                <input
-                    className="form-control mb-3"
-                    name="title"
-                    placeholder="Job Title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    required
-                />
+                <div className="col-lg-8">
 
-                <input
-                    className="form-control mb-3"
-                    name="companyName"
-                    placeholder="Company Name"
-                    value={formData.companyName}
-                    onChange={handleChange}
-                    required
-                />
+                    <div className="card shadow-sm border-0">
 
-                <input
-                    className="form-control mb-3"
-                    name="location"
-                    placeholder="Location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    required
-                />
+                        <div className="card-body p-4">
 
-                <textarea
-                    className="form-control mb-3"
-                    name="description"
-                    placeholder="Job Description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    rows="4"
-                    required
-                />
+                            <div className="text-center mb-4">
 
-                <input
-                    className="form-control mb-3"
-                    type="number"
-                    name="salary"
-                    placeholder="Salary"
-                    value={formData.salary}
-                    onChange={handleChange}
-                    required
-                />
+                                <h2 className="fw-bold">
+                                    Edit Job
+                                </h2>
 
-                <select
-                    className="form-control mb-3"
-                    name="jobType"
-                    value={formData.jobType}
-                    onChange={handleChange}
-                >
-                    <option value="FULL_TIME">
-                        Full Time
-                    </option>
+                                <p className="text-muted">
+                                    Update your job posting information.
+                                </p>
 
-                    <option value="PART_TIME">
-                        Part Time
-                    </option>
+                            </div>
 
-                    <option value="INTERNSHIP">
-                        Internship
-                    </option>
-                </select>
+                            <form onSubmit={handleSubmit}>
 
-                <button
-                    type="submit"
-                    className="btn btn-warning"
-                >
-                    Update Job
-                </button>
+                                <div className="mb-3">
 
-            </form>
+                                    <label className="form-label fw-semibold">
+                                        Job Title
+                                    </label>
+
+                                    <input
+                                        className="form-control"
+                                        name="title"
+                                        value={formData.title}
+                                        onChange={handleChange}
+                                        required
+                                    />
+
+                                </div>
+
+                                <div className="mb-3">
+
+                                    <label className="form-label fw-semibold">
+                                        Company Name
+                                    </label>
+
+                                    <input
+                                        className="form-control"
+                                        name="companyName"
+                                        value={formData.companyName}
+                                        onChange={handleChange}
+                                        required
+                                    />
+
+                                </div>
+
+                                <div className="mb-3">
+
+                                    <label className="form-label fw-semibold">
+                                        Location
+                                    </label>
+
+                                    <input
+                                        className="form-control"
+                                        name="location"
+                                        value={formData.location}
+                                        onChange={handleChange}
+                                        required
+                                    />
+
+                                </div>
+
+                                <div className="mb-3">
+
+                                    <label className="form-label fw-semibold">
+                                        Salary
+                                    </label>
+
+                                    <input
+                                        className="form-control"
+                                        type="number"
+                                        name="salary"
+                                        value={formData.salary}
+                                        onChange={handleChange}
+                                        required
+                                    />
+
+                                </div>
+
+                                <div className="mb-3">
+
+                                    <label className="form-label fw-semibold">
+                                        Job Type
+                                    </label>
+
+                                    <select
+                                        className="form-select"
+                                        name="jobType"
+                                        value={formData.jobType}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="FULL_TIME">
+                                            Full Time
+                                        </option>
+
+                                        <option value="PART_TIME">
+                                            Part Time
+                                        </option>
+
+                                        <option value="INTERNSHIP">
+                                            Internship
+                                        </option>
+                                    </select>
+
+                                </div>
+
+                                <div className="mb-4">
+
+                                    <label className="form-label fw-semibold">
+                                        Job Description
+                                    </label>
+
+                                    <textarea
+                                        className="form-control"
+                                        rows="6"
+                                        name="description"
+                                        value={formData.description}
+                                        onChange={handleChange}
+                                        required
+                                    />
+
+                                </div>
+
+                                <div className="d-flex gap-2">
+
+                                    <button
+                                        type="submit"
+                                        className="btn btn-warning"
+                                        disabled={saving}
+                                    >
+                                        {saving
+                                            ? "Updating..."
+                                            : "Update Job"}
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-secondary"
+                                        onClick={() =>
+                                            navigate("/recruiter/jobs")
+                                        }
+                                    >
+                                        Cancel
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
     );

@@ -1,5 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "../styles/Navbar.css";
 
 function Navbar() {
     const { token, role, logout } = useAuth();
@@ -11,62 +12,119 @@ function Navbar() {
     };
 
     return (
-        <nav className="navbar navbar-dark bg-dark px-3">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
 
-            <Link className="navbar-brand" to="/">
-                Job Portal
-            </Link>
+            <div className="container">
 
-            <ul className="navbar-nav ms-auto flex-row gap-3">
+                <Link className="navbar-brand fw-bold fs-4" to="/">
+                    💼 JobPortal
+                </Link>
+
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarContent"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+
+                <div
+                    className="collapse navbar-collapse"
+                    id="navbarContent"
+                >
+            <ul className="navbar-nav ms-auto align-items-lg-center gap-lg-3">
 
                 <li className="nav-item">
-                    <Link className="nav-link text-white" to="/">
+                    <NavLink
+                        to="/"
+                        end
+                        className={({ isActive }) =>
+                            isActive ? "nav-link active fw-semibold" : "nav-link"
+                        }
+                    >
                         Home
-                    </Link>
+                    </NavLink>
                 </li>
 
                 {!token && (
                     <>
                         <li className="nav-item">
-                            <Link className="nav-link text-white" to="/login">
+                            <NavLink
+                                to="/login"
+                                end
+                                className={({ isActive }) =>
+                                    isActive ? "nav-link active fw-semibold" : "nav-link"
+                                }
+                            >
                                 Login
-                            </Link>
+                            </NavLink>
                         </li>
 
                         <li className="nav-item">
-                            <Link className="nav-link text-white" to="/register">
+                            <NavLink
+                                to="/register"
+                                end
+                                className={({ isActive }) =>
+                                    isActive ? "nav-link active fw-semibold" : "nav-link"
+                                }
+                            >   
                                 Register
-                            </Link>
+                            </NavLink>
                         </li>
                     </>
                 )}
 
                 {token && role === "JOB_SEEKER" && (
                     <li className="nav-item">
-                        <Link className="nav-link text-white" to="/applications">
+                        <NavLink
+                            to="/applications"
+                            end
+                            className={({ isActive }) =>
+                                isActive ? "nav-link active fw-semibold" : "nav-link"
+                            }
+                        >
                             My Applications
-                        </Link>
+                        </NavLink>
                     </li>
                 )}
 
                 {token && role === "RECRUITER" && (
                     <>
                         <li className="nav-item">
-                            <Link className="nav-link text-white" to="/recruiter/dashboard">
+                            <NavLink
+                                to="/recruiter/dashboard"
+                                end
+                                className={({ isActive }) =>
+                                    isActive ? "nav-link active fw-semibold" : "nav-link"
+                                }
+                            >
                                 Dashboard
-                            </Link>
+                            </NavLink>
                         </li>
 
                         <li className="nav-item">
-                            <Link className="nav-link text-white" to="/recruiter/jobs">
+                            <NavLink
+                                to="/recruiter/jobs"
+                                end
+                                className={({ isActive }) =>
+                                    isActive ? "nav-link active fw-semibold" : "nav-link"
+                                }
+                            >
                                 Manage Jobs
-                            </Link>
+                            </NavLink>
                         </li>
 
                         <li className="nav-item">
-                            <Link className="nav-link text-white" to="/recruiter/jobs/create" >
+                            <NavLink
+                                to="/recruiter/jobs/create"
+                                end
+                                className={({ isActive }) =>
+                                    isActive ? "nav-link active fw-semibold" : "nav-link"
+                                }
+                            >
                                 Post Job
-                            </Link>
+                            </NavLink>
                         </li>
                     </>
                 )}
@@ -74,7 +132,7 @@ function Navbar() {
                 {token && (
                     <li className="nav-item">
                         <button
-                            className="btn btn-danger btn-sm"
+                            className="btn btn-outline-light"
                             onClick={handleLogout}
                         >
                             Logout
@@ -83,6 +141,10 @@ function Navbar() {
                 )}
 
             </ul>
+
+            </div>
+
+        </div>    
 
         </nav>
     );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllJobs } from "../services/jobService";
 import { useNavigate } from "react-router-dom";
+import "../styles/Home.css";
 
 function Home() {
 
@@ -78,7 +79,12 @@ const jobTypes = [...new Set(
     return (
         <div className="container mt-4">
 
-            <h2 className="mb-4">Latest Jobs</h2>
+            <div className="text-center mb-5">
+                <h1 className="fw-bold">Find Your Dream Job</h1>
+                    <p className="text-muted">
+                        Explore opportunities from top companies.
+                    </p>
+            </div>
 
             <div className="row mb-4">
 
@@ -130,11 +136,11 @@ const jobTypes = [...new Set(
 
 </div>
 
-            <div className="mb-4">
+            <div className="mb-4 shadow-sm">
                 <input
                     type="text"
                     className="form-control"
-                    placeholder="Search by title, company, or location..."
+                    placeholder="Search by title, company, location..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -143,46 +149,60 @@ const jobTypes = [...new Set(
             <div className="row">
 
                 {filteredJobs.length === 0 && (
-                    <div className="text-center mt-4">
-                        <h5>No jobs found</h5>
-                    </div>
+<div className="text-center py-5">
+    <h1>📭</h1>
+
+    <h4>No Jobs Found</h4>
+
+    <p className="text-muted">
+        Try changing your search or filters.
+    </p>
+</div>
                     )}                
 
                 {filteredJobs.map((job) => (
 
-                    <div className="col-md-4 mb-3" key={job.id}>
+                    <div
+                        className="col-12 col-md-6 col-lg-4 mb-4"
+                        key={job.id}
+                    >
 
-                        <div className="card shadow-sm">
+                        <div className="card h-100 shadow-sm job-card">
 
-                            <div className="card-body">
+<div className="card-body d-flex flex-column">
 
-                                <h5 className="card-title">
-                                    {job.title}
-                                </h5>
+    <h5 className="card-title fw-bold mb-3">
+        {job.title}
+    </h5>
 
-                                <p className="card-text">
-                                    <strong>Company:</strong> {job.companyName}
-                                </p>
+    <p className="mb-2">
+        🏢 <strong>{job.companyName}</strong>
+    </p>
 
-                                <p className="card-text">
-                                    <strong>Location:</strong> {job.location}
-                                </p>
+    <p className="mb-2">
+        📍 {job.location}
+    </p>
 
-                                <p className="card-text">
-                                    {job.description?.substring(0, 80)}...
-                                </p>
+    <p className="mb-2">
+        💰 {job.salary}
+    </p>
 
-                                <p className="card-text">
-                                    <strong>Salary:</strong> {job.salary}
-                                </p>
+    <p className="mb-3">
+        🧾 {job.jobType}
+    </p>
 
-                                <button className="btn btn-primary btn-sm"
-                                    onClick={() => navigate(`/jobs/${job.id}`)}
-                                    >
-                                    View Details
-                                </button>
+    <p className="text-muted flex-grow-1">
+        {job.description?.substring(0, 100)}...
+    </p>
 
-                            </div>
+    <button
+        className="btn btn-primary mt-auto"
+        onClick={() => navigate(`/jobs/${job.id}`)}
+    >
+        View Details
+    </button>
+
+</div>
 
                         </div>
 

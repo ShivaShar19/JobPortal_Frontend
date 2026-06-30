@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import {getRecruiterJobs, deleteJob} from "../services/recruiterJobService";
+import {
+    getRecruiterJobs,
+    deleteJob
+} from "../services/recruiterJobService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -7,8 +10,8 @@ function ManageJobs() {
 
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
 
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadJobs();
@@ -16,19 +19,26 @@ function ManageJobs() {
 
     const loadJobs = async () => {
         try {
+
             const data = await getRecruiterJobs();
             setJobs(data);
+
         } catch (error) {
+
             console.error(error);
+            toast.error("Failed to load jobs");
+
         } finally {
+
             setLoading(false);
         }
     };
 
     const handleDelete = async (jobId) => {
 
-        const confirmDelete =
-            window.confirm("Delete this job?");
+        const confirmDelete = window.confirm(
+            "Are you sure you want to delete this job?"
+        );
 
         if (!confirmDelete) return;
 
@@ -38,109 +48,202 @@ function ManageJobs() {
 
             setJobs(
                 jobs.filter(
-                    (job) => job.id !== jobId
+                    job => job.id !== jobId
                 )
             );
 
-            toast.success("Job deleted successfully");
+            toast.success(
+                "Job deleted successfully"
+            );
 
         } catch (error) {
 
             console.error(error);
-            toast.error("Failed to delete job");
+            toast.error(
+                "Failed to delete job"
+            );
         }
     };
 
-if (loading) {
+    if (loading) {
+        return (
+            <div className="text-center mt-5">
+
+                <div
+                    className="spinner-border"
+                    role="status"
+                >
+                    <span className="visually-hidden">
+                        Loading...
+                    </span>
+                </div>
+
+                <p className="mt-3">
+                    Loading jobs...
+                </p>
+
+            </div>
+        );
+    }
+
     return (
-        <div className="text-center mt-5">
-            <div
-                className="spinner-border"
-                role="status"
-            >
-                <span className="visually-hidden">
-                    Loading...
-                </span>
+        <div className="container py-4">
+
+            <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+
+                <div>
+                    <h2 className="fw-bold">
+                        Manage Jobs
+                    </h2>
+
+                    <p className="text-muted mb-0">
+                        View, edit and manage all your job postings.
+                    </p>
+                </div>
+
+                <button
+                    className="btn btn-primary"
+                    onClick={() =>
+                        navigate("/recruiter/jobs/create")
+                    }
+                >
+                    + Post New Job
+                </button>
+
             </div>
 
-            <p className="mt-2">
-                Loading jobs...
-            </p>
-        </div>
-    );
-}
+            {jobs.length === 0 ? (
 
-    return (
-        <div className="container mt-4">
+                <div className="card shadow-sm border-0">
 
-            <h2>Manage Jobs</h2>
+                    <div className="card-body text-center py-5">
 
-            <table className="table table-bordered mt-3">
+                        <h1 className="display-4">
+                            💼
+                        </h1>
 
-                <thead className="table-success text-center">
-                    <tr>
-                        <th>Title</th>
-                        <th>Company</th>
-                        <th>Location</th>
-                        <th>Salary</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
+                        <h4 className="mt-3">
+                            No Jobs Posted Yet
+                        </h4>
 
-                <tbody>
+                        <p className="text-muted">
+                            Start by posting your first job.
+                        </p>
 
-                    {jobs.map((job) => (
+                        <button
+                            className="btn btn-primary mt-2"
+                            onClick={() =>
+                                navigate("/recruiter/jobs/create")
+                            }
+                        >
+                            Post Job
+                        </button>
 
-                        <tr key={job.id}>
+                    </div>
 
-                            <td>{job.title}</td>
+                </div>
 
-                            <td>{job.companyName}</td>
+            ) : (
 
-                            <td>{job.location}</td>
+                <div className="card shadow-sm border-0">
 
-                            <td>{job.salary}</td>
+                    <div className="card-body">
 
-                            <td className="text-center d-flex gap-2">
+                        <div className="table-responsive">
 
-                                <button
-                                    className="btn btn-warning btn-sm"
-                                    onClick={() =>
-                                         navigate(`/recruiter/jobs/edit/${job.id}`)
-                                    }
-                                >
-                                    Edit
-                                </button>
+                            <table className="table table-hover align-middle">
 
-                                <button
-                                    className="btn btn-danger btn-sm"
-                                    onClick={() =>
-                                        handleDelete(job.id)
-                                    }
-                                >
-                                    Delete
-                                </button>
+                                <thead className="table-light">
 
-                                <button
-                                    className="btn btn-primary btn-sm me-2"
-                                    onClick={() =>
-                                        navigate(
-                                         `/recruiter/jobs/${job.id}/applicants`)
-                                    }
-                                >
-                                    Applicants
-                                </button>
+                                    <tr className="text-center">
+                                        <th>Title</th>
+                                        <th>Company</th>
+                                        <th>Location</th>
+                                        <th>Salary</th>
+                                        <th>Actions</th>
+                                    </tr>
 
-                            </td>
-                            
+                                </thead>
 
-                        </tr>
+                                <tbody>
 
-                    ))}
+                                    {jobs.map((job) => (
 
-                </tbody>
+                                        <tr
+                                            key={job.id}
+                                            className="text-center"
+                                        >
 
-            </table>
+                                            <td className="fw-semibold">
+                                                {job.title}
+                                            </td>
+
+                                            <td>
+                                                {job.companyName}
+                                            </td>
+
+                                            <td>
+                                                {job.location}
+                                            </td>
+
+                                            <td>
+                                                ₹ {job.salary}
+                                            </td>
+
+                                            <td>
+
+                                                <div className="d-flex justify-content-center gap-2 flex-wrap">
+
+                                                    <button
+                                                        className="btn btn-outline-warning btn-sm"
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `/recruiter/jobs/edit/${job.id}`
+                                                            )
+                                                        }
+                                                    >
+                                                        Edit
+                                                    </button>
+
+                                                    <button
+                                                        className="btn btn-outline-primary btn-sm"
+                                                        onClick={() =>
+                                                            navigate(
+                                                                `/recruiter/jobs/${job.id}/applicants`
+                                                            )
+                                                        }
+                                                    >
+                                                        Applicants
+                                                    </button>
+
+                                                    <button
+                                                        className="btn btn-outline-danger btn-sm"
+                                                        onClick={() =>
+                                                            handleDelete(job.id)
+                                                        }
+                                                    >
+                                                        Delete
+                                                    </button>
+
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+
+                                    ))}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
 
         </div>
     );

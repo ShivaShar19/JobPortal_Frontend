@@ -11,6 +11,7 @@ import PostJob from "./pages/PostJob";
 import ViewApplicants from "./pages/ViewApplicants";
 import JobDetails from "./pages/JobDetails";
 import ApplyJob from "./pages/ApplyJob";
+import "./styles/Global.css";
 
 
 import Login from "./pages/Login";
